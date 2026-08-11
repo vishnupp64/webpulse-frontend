@@ -1,10 +1,11 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 
-export const API_URL = (import.meta as unknown as { env: Record<string, string> }).env
-  .VITE_API_URL as string | undefined;
+export const API_URL =
+  (import.meta as unknown as { env: Record<string, string> }).env.VITE_API_URL ||
+  "https://webpulse-backend-3ty9.onrender.com";
 
 export const api: AxiosInstance = axios.create({
-  baseURL: API_URL || "",
+  baseURL: API_URL,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
