@@ -22,7 +22,25 @@ function AiReportCard({ websiteId, range }: { websiteId: number; range: "7d" | "
   const aiReport = useQuery(() => aiApi.report(p), true, [websiteId, range]);
 
   if (aiReport.loading) return <CardSkeleton rows={2} />;
-  if (aiReport.error || !aiReport.data) return null;
+  
+  if (aiReport.error || !aiReport.data) {
+    return (
+      <Card className="mb-4 border-slate-200 bg-slate-50">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-slate-800 font-semibold text-sm">
+            <Sparkles className="h-4 w-4 text-brand-600" />
+            <span>AI Executive Report Summary</span>
+          </div>
+          <button onClick={() => aiReport.reload()} className="text-xs text-brand-600 underline font-medium">
+            Retry
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-slate-500">
+          {aiReport.error ?? "AI report summary temporarily unavailable."}
+        </p>
+      </Card>
+    );
+  }
 
   const data = aiReport.data;
 

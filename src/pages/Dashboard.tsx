@@ -19,7 +19,25 @@ function AiInsightsSection({ p }: { p: QueryParams }) {
   const aiQuery = useQuery(() => aiApi.insights(p), true, [p]);
 
   if (aiQuery.loading) return <CardSkeleton rows={2} />;
-  if (aiQuery.error || !aiQuery.data) return null;
+  
+  if (aiQuery.error || !aiQuery.data) {
+    return (
+      <Card className="mb-6 border-amber-200 bg-amber-50/40">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-amber-900 font-semibold text-sm">
+            <Sparkles className="h-4 w-4 text-amber-600" />
+            <span>🤖 AI Website Insights</span>
+          </div>
+          <button onClick={() => aiQuery.reload()} className="text-xs text-amber-700 underline font-medium hover:text-amber-900">
+            Retry loading
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-amber-700">
+          {aiQuery.error ?? "AI insights temporarily unavailable. Your analytics metrics are actively displayed below."}
+        </p>
+      </Card>
+    );
+  }
 
   const data = aiQuery.data;
 
