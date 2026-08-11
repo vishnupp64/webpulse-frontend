@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown, Globe } from "lucide-react";
+import { ChevronDown, Globe, Plus, Layers } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useWebsite } from "../context/WebsiteContext";
 
-export default function WebsiteSelector() {
+export default function WebsiteSelector({ onAddWebsite }: { onAddWebsite?: () => void }) {
   const { websites, current, select } = useWebsite();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handler(e: MouseEvent) {
@@ -34,7 +36,7 @@ export default function WebsiteSelector() {
             <button
               key={w.id}
               className={`flex w-full items-center justify-between px-4 py-2.5 text-left text-sm hover:bg-slate-50 ${
-                current?.id === w.id ? "bg-brand-50 text-brand-700" : "text-slate-700"
+                current?.id === w.id ? "bg-brand-50 font-medium text-brand-700" : "text-slate-700"
               }`}
               onClick={() => {
                 select(w.id);
@@ -47,6 +49,25 @@ export default function WebsiteSelector() {
               </div>
             </button>
           ))}
+          <div className="border-t border-slate-100 p-1.5 space-y-0.5 bg-slate-50/50">
+            <button
+              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium text-brand-600 hover:bg-brand-50"
+              onClick={() => {
+                setOpen(false);
+                if (onAddWebsite) onAddWebsite();
+                else navigate("/websites?new=1");
+              }}
+            >
+              <Plus className="h-4 w-4" /> Add website
+            </button>
+            <Link
+              to="/websites"
+              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-xs font-medium text-slate-600 hover:bg-slate-100"
+              onClick={() => setOpen(false)}
+            >
+              <Layers className="h-3.5 w-3.5 text-slate-400" /> Manage all websites
+            </Link>
+          </div>
         </div>
       )}
     </div>

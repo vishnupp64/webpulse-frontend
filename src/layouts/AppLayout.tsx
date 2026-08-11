@@ -33,7 +33,8 @@ export default function AppLayout() {
   const { current, refresh } = useWebsite();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [addModalOpen, setAddModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [domain, setDomain] = useState("");
   const [busy, setBusy] = useState(false);
@@ -43,7 +44,7 @@ export default function AppLayout() {
     try {
       const { website } = await websiteApi.create({ name, domain });
       toast("Website created", "success");
-      setOpen(false);
+      setAddModalOpen(false);
       setName("");
       setDomain("");
       await refresh();
@@ -108,11 +109,11 @@ export default function AppLayout() {
       <aside className="hidden w-60 border-r border-slate-200 bg-white lg:block">{sidebar}</aside>
 
       {/* Mobile sidebar */}
-      {open && (
+      {menuOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-slate-900/40" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-slate-900/40" onClick={() => setMenuOpen(false)} />
           <aside className="absolute left-0 top-0 h-full w-60 bg-white shadow-xl">{sidebar}</aside>
-          <button className="absolute left-64 top-4 text-slate-200" onClick={() => setOpen(false)}>
+          <button className="absolute left-64 top-4 text-slate-200" onClick={() => setMenuOpen(false)}>
             <X className="h-6 w-6" />
           </button>
         </div>
@@ -121,11 +122,11 @@ export default function AppLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Topbar */}
         <header className="flex items-center gap-3 border-b border-slate-200 bg-white px-4 py-3 lg:px-6">
-          <button className="btn-secondary p-2 lg:hidden" onClick={() => setOpen(true)} aria-label="Menu">
+          <button className="btn-secondary p-2 lg:hidden" onClick={() => setMenuOpen(true)} aria-label="Menu">
             <Menu className="h-5 w-5" />
           </button>
           <div className="min-w-0 flex-1">
-            <WebsiteSelector />
+            <WebsiteSelector onAddWebsite={() => setAddModalOpen(true)} />
           </div>
           <DateRangeSelector />
         </header>
@@ -134,18 +135,18 @@ export default function AppLayout() {
           {current ? (
             <Outlet />
           ) : (
-            <EmptyWebsites onCreate={() => setOpen(true)} />
+            <EmptyWebsites onCreate={() => setAddModalOpen(true)} />
           )}
         </main>
       </div>
 
       <Modal
-        open={open}
-        onClose={() => setOpen(false)}
+        open={addModalOpen}
+        onClose={() => setAddModalOpen(false)}
         title="Add website"
         footer={
           <>
-            <button className="btn btn-secondary" onClick={() => setOpen(false)}>Cancel</button>
+            <button className="btn btn-secondary" onClick={() => setAddModalOpen(false)}>Cancel</button>
             <button className="btn btn-primary" onClick={create} disabled={busy || !name || !domain}>
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               {busy ? "Creating..." : "Create"}
