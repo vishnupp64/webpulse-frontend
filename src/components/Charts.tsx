@@ -29,15 +29,29 @@ export function TrafficChart({ data, color = "#6366f1" }: { data: SeriesPoint[];
 }
 
 export function DonutChart({ items }: { items: Array<{ name: string; value: number }> }) {
-  const data = items.filter((i) => i.value > 0);
+  const data = items
+    .filter((i) => i.value > 0)
+    .map((i) => ({
+      name: i.name ? i.name.charAt(0).toUpperCase() + i.name.slice(1) : "Unknown",
+      value: i.value,
+    }));
   if (data.length === 0) return <p className="py-10 text-center text-sm text-slate-400">No data</p>;
   const total = data.reduce((s, i) => s + i.value, 0);
   return (
     <div className="flex flex-col items-center gap-4 sm:flex-row">
-      <div className="h-52 w-52">
+      <div className="h-52 w-52 min-w-[13rem] shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <Pie data={data} dataKey="value" nameKey="name" innerRadius={55} outerRadius={80} paddingAngle={2}>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              innerRadius={50}
+              outerRadius={75}
+              paddingAngle={3}
+            >
               {data.map((_, i) => (
                 <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
               ))}
@@ -46,15 +60,15 @@ export function DonutChart({ items }: { items: Array<{ name: string; value: numb
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <ul className="w-full space-y-1 text-sm">
+      <ul className="w-full space-y-1.5 text-sm">
         {data.map((d, i) => (
           <li key={d.name} className="flex items-center justify-between">
-            <span className="flex items-center gap-2 text-slate-600">
-              <span className="h-3 w-3 rounded-full" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
+            <span className="flex items-center gap-2 text-slate-600 capitalize">
+              <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
               {d.name}
             </span>
             <span className="font-medium text-slate-800">
-              {total ? Math.round((d.value / total) * 100) : 0}%
+              {total ? Math.round((d.value / total) * 100) : 0}% ({d.value})
             </span>
           </li>
         ))}

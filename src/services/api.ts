@@ -1,8 +1,10 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 
+const envApiUrl = (import.meta as unknown as { env: Record<string, string> }).env.VITE_API_URL;
+const isDev = (import.meta as unknown as { env: Record<string, boolean> }).env.DEV;
+
 export const API_URL =
-  (import.meta as unknown as { env: Record<string, string> }).env.VITE_API_URL ||
-  "https://webpulse-backend-3ty9.onrender.com";
+  envApiUrl || (isDev ? "" : "https://webpulse-backend-3ty9.onrender.com");
 
 export const api: AxiosInstance = axios.create({
   baseURL: API_URL,
