@@ -7,7 +7,7 @@ import { websiteApi } from "../services";
 import { errorMessage } from "../services/api";
 import {
   LayoutDashboard, Radio, LayoutTemplate, Users, Zap, Target, Share2, Monitor,
-  Settings, LogOut, Menu, X, Gauge, CalendarDays, FileText,
+  Settings, LogOut, Menu, X, Gauge, CalendarDays, FileText, Sparkles,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useWebsite } from "../context/WebsiteContext";
@@ -24,6 +24,7 @@ const NAV = [
   { to: "/conversions", label: "Conversions", icon: Target },
   { to: "/sources", label: "Sources", icon: Share2 },
   { to: "/devices", label: "Devices", icon: Monitor },
+  { to: "/ai-analyst", label: "AI Analyst", icon: Sparkles },
   { to: "/report", label: "Report", icon: FileText },
   { to: "/settings", label: "Settings", icon: Settings },
 ];

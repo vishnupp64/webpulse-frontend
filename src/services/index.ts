@@ -1,5 +1,25 @@
 import { api, get, post, put, del, setToken } from "./api";
-import type { User, Website, WebsiteSummary, Overview, SeriesPoint, Metric, TopPage, SourceRow, BreakdownRow, EventRow, ConversionRow, ConversionGoal, Realtime, Report, RangeKey } from "../types";
+import type {
+  User,
+  Website,
+  WebsiteSummary,
+  Overview,
+  SeriesPoint,
+  Metric,
+  TopPage,
+  SourceRow,
+  BreakdownRow,
+  EventRow,
+  ConversionRow,
+  ConversionGoal,
+  Realtime,
+  Report,
+  RangeKey,
+  AiInsightsResponse,
+  AiChatMessage,
+  AiReportResponse,
+  AnomalyItem,
+} from "../types";
 
 export const authApi = {
   register: (data: { name: string; email: string; password: string }) =>
@@ -46,6 +66,7 @@ export const analyticsApi = {
   conversions: (p: QueryParams) => get<ConversionRow[]>("/api/analytics/conversions", base(p)),
   realtime: (websiteId: number) =>
     get<Realtime>("/api/analytics/realtime", { websiteId }),
+  anomalies: (p: QueryParams) => get<AnomalyItem[]>("/api/analytics/anomalies", base(p)),
 };
 
 export const conversionApi = {
@@ -60,7 +81,15 @@ export const conversionApi = {
 export const reportApi = {
   get: (websiteId: number, range: "7d" | "30d" | "90d") =>
     get<Report>("/api/report", { websiteId, range }),
-  insights: () => post<{ insights: Array<{ title: string; body: string; type: string }> }>("/api/ai/insights", {}),
+};
+
+export const aiApi = {
+  insights: (p: QueryParams) => post<AiInsightsResponse>("/api/ai/insights", base(p)),
+  chat: (p: { websiteId: number; question: string; startDate?: string; endDate?: string }) =>
+    post<AiChatMessage>("/api/ai/chat", p),
+  report: (p: QueryParams) => post<AiReportResponse>("/api/ai/report", base(p)),
+  explainAnomaly: (p: { websiteId: number; anomalyId?: string }) =>
+    post<{ anomalies: AnomalyItem[]; explanation: string }>("/api/ai/anomaly-explanation", p),
 };
 
 export { setToken };

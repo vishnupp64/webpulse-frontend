@@ -158,7 +158,53 @@ export function sourceLabel(s: string): string {
     referral: "Referral",
     social: "Social",
     email: "Email",
-    other: "Other",
+    paid: "Paid Search",
+    unknown: "Unknown",
   };
-  return map[s] ?? s;
+  return map[s.toLowerCase()] || s;
+}
+
+export interface InsightCard {
+  type: "positive" | "warning" | "opportunity";
+  title: string;
+  description: string;
+  priority: "high" | "medium" | "low";
+}
+
+export interface RecommendationCard {
+  title: string;
+  description: string;
+  priority: "high" | "medium" | "low";
+}
+
+export interface AiInsightsResponse {
+  summary: string;
+  insights: InsightCard[];
+  recommendations: RecommendationCard[];
+}
+
+export interface AiChatMessage {
+  answer: string;
+  keyMetrics?: Array<{ label: string; value: string }>;
+  recommendations?: string[];
+}
+
+export interface AiReportResponse {
+  title: string;
+  executiveSummary: string;
+  sections: Array<{ heading: string; content: string }>;
+  keyChanges: string[];
+  recommendations: string[];
+}
+
+export interface AnomalyItem {
+  id: string;
+  type: "traffic_drop" | "traffic_spike" | "bounce_spike" | "conversion_drop";
+  metricName: string;
+  title: string;
+  description: string;
+  severity: "high" | "medium" | "low";
+  changePercentage: number;
+  currentValue: number;
+  baselineValue: number;
 }

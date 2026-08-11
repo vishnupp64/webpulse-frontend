@@ -15,6 +15,7 @@ import Events from "./pages/Events";
 import Conversions from "./pages/Conversions";
 import Sources from "./pages/Sources";
 import Devices from "./pages/Devices";
+import AiAnalyst from "./pages/AiAnalyst";
 import ReportPage from "./pages/Report";
 import SettingsPage from "./pages/Settings";
 import WebsitesPage from "./pages/Websites";
@@ -80,6 +81,7 @@ export default function App() {
                           <Route path="/conversions" element={<Conversions />} />
                           <Route path="/sources" element={<Sources />} />
                           <Route path="/devices" element={<Devices />} />
+                          <Route path="/ai-analyst" element={<AiAnalyst />} />
                           <Route path="/report" element={<ReportPage />} />
                           <Route path="/settings" element={<SettingsPage />} />
                           <Route path="/websites" element={<WebsitesPage />} />
