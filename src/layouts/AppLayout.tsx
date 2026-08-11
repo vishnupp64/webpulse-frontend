@@ -31,7 +31,7 @@ const NAV = [
 
 export default function AppLayout() {
   const { user, logout } = useAuth();
-  const { current, refresh } = useWebsite();
+  const { current, loading: siteLoading, refresh } = useWebsite();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -133,7 +133,11 @@ export default function AppLayout() {
         </header>
 
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
-          {current ? (
+          {siteLoading ? (
+            <div className="flex h-64 items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-brand-600" />
+            </div>
+          ) : current ? (
             <Outlet />
           ) : (
             <EmptyWebsites onCreate={() => setAddModalOpen(true)} />
