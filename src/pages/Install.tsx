@@ -16,11 +16,14 @@ export default function Install() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const trackerBase = import.meta.env.VITE_TRACKER_URL || window.location.origin;
+  const trackerBase =
+    import.meta.env.VITE_TRACKER_URL ||
+    (import.meta.env.DEV ? "http://localhost:4000" : "https://webpulse-backend-3ty9.onrender.com");
 
   const script = `<script
   src="${trackerBase}/tracker.js"
   data-website-id="${website?.trackingId ?? "wp_xxxxx"}"
+  data-url="${trackerBase}"
   defer>
 </script>`;
 
